@@ -48,7 +48,7 @@ with st.sidebar:
 
 if user_form_submitted == True and selected == 'User' :
     # page title
-    st.title('Add your details')
+    st.title('Add your details to procede further')
 
     # getting the input data from the user
     col1, col2, col3 = st.columns(3)

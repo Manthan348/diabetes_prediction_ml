@@ -20,236 +20,271 @@ heart_disease_model = pickle.load(open(f'{working_dir}/saved_models/heart_diseas
 
 parkinsons_model = pickle.load(open(f'{working_dir}/saved_models/parkinsons_model.sav', 'rb'))
 
+global user_form_submitted 
+user_form_submitted = True
+
 # sidebar for navigation
-user_form_submitted = False
-def main_form():
-         with st.sidebar:
-            selected = option_menu('Multiple Disease Prediction System',
 
-                                ['Diabetes Prediction',
-                                    'Heart Disease Prediction',
-                                    'Parkinsons Prediction'],
-                                menu_icon='hospital-fill',
-                                icons=['activity', 'heart', 'person'],
-                                default_index=0)
+with st.sidebar:
+    
+    selected = option_menu('Multiple Disease Prediction System',
+                        ['User','Diabetes Prediction',
+                            'Heart Disease Prediction',
+                            'Parkinsons Prediction' ],
+                        menu_icon='hospital-fill',
+                        icons=['user', 'activity', 'heart', 'person'],
+                        default_index=0)
 
+    # if user_form_submitted == False :
+    #     st.title("User Information")
+    #     name = st.text_input("Name")
+    #     age = st.number_input("Age", min_value=0, max_value=150)
+    #     email = st.text_input("Email")
+    #     if st.button("Submit"):
+    #         # response = store_user_data(name, age, email)
+    #         # if response.status_code == 200:
+    #         #     st.success("User information submitted successfully!")
+    #             user_form_submitted=True
 
-        # Diabetes Prediction Page
-            if selected == 'Diabetes Prediction':
+if user_form_submitted == True and selected == 'User' :
+    # page title
+    st.title('Add your details')
 
-                # page title
-                st.title('Diabetes Prediction using ML')
+    # getting the input data from the user
+    col1, col2, col3 = st.columns(3)
 
-                # getting the input data from the user
-                col1, col2, col3 = st.columns(3)
+    with col1:
+        name = st.text_input('Name')
 
-                with col1:
-                    Pregnancies = st.text_input('Number of Pregnancies')
+    with col2:
+        age = st.text_input('Age')
 
-                with col2:
-                    Glucose = st.text_input('Glucose Level')
+    with col3:
+        email = st.text_input('Email')
 
-                with col3:
-                    BloodPressure = st.text_input('Blood Pressure value')
+    if st.button("Submit"):
+    #         # response = store_user_data(name, age, email)
+    #         # if response.status_code == 200:
+        user_form_submitted=True
+        print(user_form_submitted)
+        st.success("User information submitted successfully!")
+                
+# Diabetes Prediction Page
+if user_form_submitted == True and selected == 'Diabetes Prediction'  :
 
-                with col1:
-                    SkinThickness = st.text_input('Skin Thickness value')
+    # page title
+    st.title('Diabetes Prediction using ML')
 
-                with col2:
-                    Insulin = st.text_input('Insulin Level')
+    # getting the input data from the user
+    col1, col2, col3 = st.columns(3)
 
-                with col3:
-                    BMI = st.text_input('BMI value')
+    with col1:
+        Pregnancies = st.text_input('Number of Pregnancies')
 
-                with col1:
-                    DiabetesPedigreeFunction = st.text_input('Diabetes Pedigree Function value')
+    with col2:
+        Glucose = st.text_input('Glucose Level')
 
-                with col2:
-                    Age = st.text_input('Age of the Person')
+    with col3:
+        BloodPressure = st.text_input('Blood Pressure value')
 
+    with col1:
+        SkinThickness = st.text_input('Skin Thickness value')
 
-                # code for Prediction
-                diab_diagnosis = ''
+    with col2:
+        Insulin = st.text_input('Insulin Level')
 
-                # creating a button for Prediction
+    with col3:
+        BMI = st.text_input('BMI value')
 
-                if st.button('Diabetes Test Result'):
+    with col1:
+        DiabetesPedigreeFunction = st.text_input('Diabetes Pedigree Function value')
 
-                    user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
-                                BMI, DiabetesPedigreeFunction, Age]
+    with col2:
+        Age = st.text_input('Age of the Person')
 
-                    user_input = [float(x) for x in user_input]
 
-                    diab_prediction = diabetes_model.predict([user_input])
+    # code for Prediction
+    diab_diagnosis = ''
 
-                    if diab_prediction[0] == 1:
-                        diab_diagnosis = 'The person is diabetic'
-                    else:
-                        diab_diagnosis = 'The person is not diabetic'
+    # creating a button for Prediction
 
-                st.success(diab_diagnosis)
+    if st.button('Diabetes Test Result'):
 
-            # Heart Disease Prediction Page
-            if selected == 'Heart Disease Prediction':
+        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
+                    BMI, DiabetesPedigreeFunction, Age]
 
-                # page title
-                st.title('Heart Disease Prediction using ML')
+        user_input = [float(x) for x in user_input]
 
-                col1, col2, col3 = st.columns(3)
+        diab_prediction = diabetes_model.predict([user_input])
 
-                with col1:
-                    age = st.text_input('Age')
+        if diab_prediction[0] == 1:
+            diab_diagnosis = 'The person is diabetic'
+        else:
+            diab_diagnosis = 'The person is not diabetic'
 
-                with col2:
-                    sex = st.text_input('Sex')
+    st.success(diab_diagnosis)
 
-                with col3:
-                    cp = st.text_input('Chest Pain types')
+# Heart Disease Prediction Page
+if selected == 'Heart Disease Prediction' and user_form_submitted==True:
 
-                with col1:
-                    trestbps = st.text_input('Resting Blood Pressure')
+    # page title
+    st.title('Heart Disease Prediction using ML')
 
-                with col2:
-                    chol = st.text_input('Serum Cholestoral in mg/dl')
+    col1, col2, col3 = st.columns(3)
 
-                with col3:
-                    fbs = st.text_input('Fasting Blood Sugar > 120 mg/dl')
+    with col1:
+        age = st.text_input('Age')
 
-                with col1:
-                    restecg = st.text_input('Resting Electrocardiographic results')
+    with col2:
+        sex = st.text_input('Sex')
 
-                with col2:
-                    thalach = st.text_input('Maximum Heart Rate achieved')
+    with col3:
+        cp = st.text_input('Chest Pain types')
 
-                with col3:
-                    exang = st.text_input('Exercise Induced Angina')
+    with col1:
+        trestbps = st.text_input('Resting Blood Pressure')
 
-                with col1:
-                    oldpeak = st.text_input('ST depression induced by exercise')
+    with col2:
+        chol = st.text_input('Serum Cholestoral in mg/dl')
 
-                with col2:
-                    slope = st.text_input('Slope of the peak exercise ST segment')
+    with col3:
+        fbs = st.text_input('Fasting Blood Sugar > 120 mg/dl')
 
-                with col3:
-                    ca = st.text_input('Major vessels colored by flourosopy')
+    with col1:
+        restecg = st.text_input('Resting Electrocardiographic results')
 
-                with col1:
-                    thal = st.text_input('thal: 0 = normal; 1 = fixed defect; 2 = reversable defect')
+    with col2:
+        thalach = st.text_input('Maximum Heart Rate achieved')
 
-                # code for Prediction
-                heart_diagnosis = ''
+    with col3:
+        exang = st.text_input('Exercise Induced Angina')
 
-                # creating a button for Prediction
+    with col1:
+        oldpeak = st.text_input('ST depression induced by exercise')
 
-                if st.button('Heart Disease Test Result'):
+    with col2:
+        slope = st.text_input('Slope of the peak exercise ST segment')
 
-                    user_input = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
+    with col3:
+        ca = st.text_input('Major vessels colored by flourosopy')
 
-                    user_input = [float(x) for x in user_input]
+    with col1:
+        thal = st.text_input('thal: 0 = normal; 1 = fixed defect; 2 = reversable defect')
 
-                    heart_prediction = heart_disease_model.predict([user_input])
+    # code for Prediction
+    heart_diagnosis = ''
 
-                    if heart_prediction[0] == 1:
-                        heart_diagnosis = 'The person is having heart disease'
-                    else:
-                        heart_diagnosis = 'The person does not have any heart disease'
+    # creating a button for Prediction
 
-                st.success(heart_diagnosis)
+    if st.button('Heart Disease Test Result'):
 
-            # Parkinson's Prediction Page
-            if selected == "Parkinsons Prediction":
+        user_input = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
 
-                # page title
-                st.title("Parkinson's Disease Prediction using ML")
+        user_input = [float(x) for x in user_input]
 
-                col1, col2, col3, col4, col5 = st.columns(5)
+        heart_prediction = heart_disease_model.predict([user_input])
 
-                with col1:
-                    fo = st.text_input('MDVP:Fo(Hz)')
+        if heart_prediction[0] == 1:
+            heart_diagnosis = 'The person is having heart disease'
+        else:
+            heart_diagnosis = 'The person does not have any heart disease'
 
-                with col2:
-                    fhi = st.text_input('MDVP:Fhi(Hz)')
+    st.success(heart_diagnosis)
 
-                with col3:
-                    flo = st.text_input('MDVP:Flo(Hz)')
+# Parkinson's Prediction Page
+if selected == "Parkinsons Prediction" and user_form_submitted==True:
 
-                with col4:
-                    Jitter_percent = st.text_input('MDVP:Jitter(%)')
+                    # page title
+                    st.title("Parkinson's Disease Prediction using ML")
 
-                with col5:
-                    Jitter_Abs = st.text_input('MDVP:Jitter(Abs)')
+                    col1, col2, col3, col4, col5 = st.columns(5)
 
-                with col1:
-                    RAP = st.text_input('MDVP:RAP')
+                    with col1:
+                        fo = st.text_input('MDVP:Fo(Hz)')
 
-                with col2:
-                    PPQ = st.text_input('MDVP:PPQ')
+                    with col2:
+                        fhi = st.text_input('MDVP:Fhi(Hz)')
 
-                with col3:
-                    DDP = st.text_input('Jitter:DDP')
+                    with col3:
+                        flo = st.text_input('MDVP:Flo(Hz)')
 
-                with col4:
-                    Shimmer = st.text_input('MDVP:Shimmer')
+                    with col4:
+                        Jitter_percent = st.text_input('MDVP:Jitter(%)')
 
-                with col5:
-                    Shimmer_dB = st.text_input('MDVP:Shimmer(dB)')
+                    with col5:
+                        Jitter_Abs = st.text_input('MDVP:Jitter(Abs)')
 
-                with col1:
-                    APQ3 = st.text_input('Shimmer:APQ3')
+                    with col1:
+                        RAP = st.text_input('MDVP:RAP')
 
-                with col2:
-                    APQ5 = st.text_input('Shimmer:APQ5')
+                    with col2:
+                        PPQ = st.text_input('MDVP:PPQ')
 
-                with col3:
-                    APQ = st.text_input('MDVP:APQ')
+                    with col3:
+                        DDP = st.text_input('Jitter:DDP')
 
-                with col4:
-                    DDA = st.text_input('Shimmer:DDA')
+                    with col4:
+                        Shimmer = st.text_input('MDVP:Shimmer')
 
-                with col5:
-                    NHR = st.text_input('NHR')
+                    with col5:
+                        Shimmer_dB = st.text_input('MDVP:Shimmer(dB)')
 
-                with col1:
-                    HNR = st.text_input('HNR')
+                    with col1:
+                        APQ3 = st.text_input('Shimmer:APQ3')
 
-                with col2:
-                    RPDE = st.text_input('RPDE')
+                    with col2:
+                        APQ5 = st.text_input('Shimmer:APQ5')
 
-                with col3:
-                    DFA = st.text_input('DFA')
+                    with col3:
+                        APQ = st.text_input('MDVP:APQ')
 
-                with col4:
-                    spread1 = st.text_input('spread1')
+                    with col4:
+                        DDA = st.text_input('Shimmer:DDA')
 
-                with col5:
-                    spread2 = st.text_input('spread2')
+                    with col5:
+                        NHR = st.text_input('NHR')
 
-                with col1:
-                    D2 = st.text_input('D2')
+                    with col1:
+                        HNR = st.text_input('HNR')
 
-                with col2:
-                    PPE = st.text_input('PPE')
+                    with col2:
+                        RPDE = st.text_input('RPDE')
 
-                # code for Prediction
-                parkinsons_diagnosis = ''
+                    with col3:
+                        DFA = st.text_input('DFA')
 
-                # creating a button for Prediction    
-                if st.button("Parkinson's Test Result"):
+                    with col4:
+                        spread1 = st.text_input('spread1')
 
-                    user_input = [fo, fhi, flo, Jitter_percent, Jitter_Abs,
-                                RAP, PPQ, DDP,Shimmer, Shimmer_dB, APQ3, APQ5,
-                                APQ, DDA, NHR, HNR, RPDE, DFA, spread1, spread2, D2, PPE]
+                    with col5:
+                        spread2 = st.text_input('spread2')
 
-                    user_input = [float(x) for x in user_input]
+                    with col1:
+                        D2 = st.text_input('D2')
 
-                    parkinsons_prediction = parkinsons_model.predict([user_input])
+                    with col2:
+                        PPE = st.text_input('PPE')
 
-                    if parkinsons_prediction[0] == 1:
-                        parkinsons_diagnosis = "The person has Parkinson's disease"
-                    else:
-                        parkinsons_diagnosis = "The person does not have Parkinson's disease"
+                    # code for Prediction
+                    parkinsons_diagnosis = ''
 
-                st.success(parkinsons_diagnosis)
+                    # creating a button for Prediction    
+                    if st.button("Parkinson's Test Result"):
+
+                        user_input = [fo, fhi, flo, Jitter_percent, Jitter_Abs,
+                                    RAP, PPQ, DDP,Shimmer, Shimmer_dB, APQ3, APQ5,
+                                    APQ, DDA, NHR, HNR, RPDE, DFA, spread1, spread2, D2, PPE]
+
+                        user_input = [float(x) for x in user_input]
+
+                        parkinsons_prediction = parkinsons_model.predict([user_input])
+
+                        if parkinsons_prediction[0] == 1:
+                            parkinsons_diagnosis = "The person has Parkinson's disease"
+                        else:
+                            parkinsons_diagnosis = "The person does not have Parkinson's disease"
+
+                    st.success(parkinsons_diagnosis)
 
 def user_form():
     st.title("User Information")
@@ -261,15 +296,13 @@ def user_form():
         # if response.status_code == 200:
         #     st.success("User information submitted successfully!")
             user_form_submitted=True
+            
+
             return True
     #     else:
     #         st.error("Failed to submit user information.")
     #         return False
     # return False
 
-# if user_form_submitted==True:
 
-if __name__ == '__main__':
-    a=user_form()
-    if a==True:
-        main_form()
+
